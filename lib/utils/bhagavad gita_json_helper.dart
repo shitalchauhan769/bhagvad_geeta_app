@@ -8,11 +8,12 @@ class BhagavadGitaHelper {
     List json = jsonDecode(jsonString);
 
     List<ChapterModel> chapterList = json .map((e) => ChapterModel.mapToModel(e)).toList();
+    // print("${chapterList.}")
     return chapterList;
 
   }
   Future<List<VerseModel>> verse() async {
-     var jsonString =await rootBundle.loadString("assets/json/verse.json");
+     var jsonString = await rootBundle.loadString("assets/json/verse.json");
      List json1=jsonDecode(jsonString);
      List<VerseModel>verseList=json1.map((e) => VerseModel.mapToModel(e)).toList();
      return verseList;

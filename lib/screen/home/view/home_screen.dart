@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:departure_bhagavadgita_app/screen/home/provider/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  PageController pageController =
+  PageController(viewportFraction: 0.8, keepPage: true);
   HomeProvider? providerR;
   HomeProvider? providerW;
 
@@ -25,18 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
     providerW = context.watch<HomeProvider>();
     providerR = context.read<HomeProvider>();
     return Scaffold(
-      // backgroundColor: Colors.orange.shade300,
+
       appBar: AppBar(
-        // backgroundColor: Colors.orange,
 
         centerTitle: true,
         title: const Text("|| श्री भगवद् गीता ||"),
-        // leading: IconButton(
-        //   onPressed: () {
-        //    providerR!.themaChang();
-        //
-        //   },icon: Icon(providerW!.theme==true?Icons.light_mode_outlined:Icons.dark_mode),
-        // ),
+
         actions: [
           // Switch(value:providerW!.isTheme! , onChanged: (value) {
           //   providerR!.checkTheme();
@@ -45,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
-                child: const Text("Ligth"),
+                child: const Text("Light"),
                 onTap: () {
-                  providerR!.setTheme("Ligth");
+                  providerR!.setTheme("Light");
                 },
               ),
               PopupMenuItem(
@@ -69,15 +66,59 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            height: 300,
-            width: MediaQuery.sizeOf(context).width,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(
-                        "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/e8/0f/1f/krishna-talking-with.jpg?w=1200&h=-1&s=1"),
-                    fit: BoxFit.cover)),
+          // Container(
+          //   height: 300,
+          //   width: MediaQuery.sizeOf(context).width,
+          //   decoration: const BoxDecoration(
+          //       image: DecorationImage(
+          //           image: NetworkImage(
+          //               "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/e8/0f/1f/krishna-talking-with.jpg?w=1200&h=-1&s=1"),
+          //           fit: BoxFit.cover)),
+          // ),
+          CarouselSlider.builder(
+            itemCount: providerW!.chapterList.length,
+            itemBuilder: (context, index, realIndex) {
+              return Container(
+                height: 200,
+                width: MediaQuery.sizeOf(context).width,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            providerW!.chapterList[index].imageUrl as String),
+                        fit: BoxFit.fill)),
+              );
+            },
+            options: CarouselOptions(
+              initialPage: 2,
+              onPageChanged: (index, reason) {
+                providerR!.changeIndex(index);
+                pageController = PageController(initialPage: index);
+              },
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 3),
+              enlargeCenterPage: true,
+              viewportFraction: 0.8,
+            ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: List.generate(
+          //     providerW!.chapterList.length,
+          //         (index) => Container(
+          //       height: 10,
+          //       width: 10,
+          //       decoration: BoxDecoration(
+          //           shape: BoxShape.circle,
+          //           color: index == providerW!.selectedImageIndex
+          //               ? Colors.blue
+          //               : Colors.grey),
+          //       margin: const EdgeInsets.all(2),
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: ListView.builder(
               itemCount: providerW!.chapterList.length,
@@ -85,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 return InkWell(
                   onTap: () {
                     providerR!.selectedVerse(
-                        providerR!.chapterList[index].chapter_number!);
-                    Navigator.pushNamed(context, "details");
+                        providerR!.chapterList[index].chapter_number!,);
+                    Navigator.pushNamed(context, "details",);
                     providerR!.changeIndex(index);
                   },
                   child: Column(
@@ -100,19 +141,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(
                               width: 20,
                             ),
-                            Text(
-                              "${providerW!.chapterList[index].name}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20),
+
+                            Center(
+                              child: providerW!.language == "Sanskrit"
+                                  ? Text(
+                                "${providerR!.chapterList[index].name_sanskrit}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              )
+                                  : providerW!.language == "English"
+                                  ? Text(
+                                "${providerR!.chapterList[index].name_translation}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              )
+                                  : Text(
+                                "${providerR!.chapterList[index].name}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
                             ),
-                            // Container(
-                            //   height: 50,
-                            //   width: 50,
-                            //   decoration:  BoxDecoration(
-                            //     shape: BoxShape.circle,
-                            //     image: DecorationImage(image: NetworkImage("${providerW!.chapterList[index].imageUrl}"),),
-                            //   ),
-                            // )
+
                           ],
                         ),
                         subtitle: Row(
@@ -135,9 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Divider(
                         color: Colors.black,
                         thickness: 1,
-                      ),
-
-                      // Container(
+                      ), // Container(
                       //   height: 90,
                       //   width: MediaQuery
                       //       .sizeOf(context)

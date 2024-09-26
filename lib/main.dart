@@ -18,7 +18,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        themeMode:value.theme =="Ligth"
+        themeMode:value.theme =="Light"
             ?ThemeMode.light
             :value.theme=="Dark"
             ?ThemeMode.dark

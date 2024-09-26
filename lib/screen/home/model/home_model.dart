@@ -33,9 +33,9 @@ class ChapterModel {
         chapter_summary_hindi: m1['chapter_summary_hindi'],
         image_name: m1['image_name'],
         name_meaning: m1['name_meaning'],
-        name_translation: m1['  name_translation'],
+        name_translation: m1['name_translation'],
         name_sanskrit: m1['name_sanskrit'],
-        imageUrl: m1[' imageUrl']
+        imageUrl: m1['imageUrl']
 
 
     );

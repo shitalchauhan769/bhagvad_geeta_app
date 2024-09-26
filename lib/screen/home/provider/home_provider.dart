@@ -1,6 +1,7 @@
 import 'package:departure_bhagavadgita_app/utils/bhagavad%20gita_json_helper.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/shared_halper.dart';
+
+import '../../../utils/shared_helper.dart';
 import '../model/home_model.dart';
 class HomeProvider with ChangeNotifier
 {
@@ -10,14 +11,16 @@ class HomeProvider with ChangeNotifier
   String themeName = "system";
   String? theme;
   bool? isTheme=false;
-  int selectedIndex=0;
+  int selectedIndex = 0;
   List<String> bookMark=[];
   String language ='Sanskrit';
+  int selectedImageIndex = 0;
 
 
   Future<void> getBhagavadGita() async {
     BhagavadGitaHelper bhagavadGitaHelper=BhagavadGitaHelper();
-    chapterList=await bhagavadGitaHelper.bhagavadGita();
+    chapterList =await bhagavadGitaHelper.bhagavadGita();
+    // print("${chapterList[index].imageUrl}");
     notifyListeners();
 
   }
@@ -47,6 +50,16 @@ class HomeProvider with ChangeNotifier
     notifyListeners();
 
   }
+  void changeImage(int index) {
+    if (selectedImageIndex > chapterList.length + 1) {
+      selectedImageIndex++;
+    } else {
+      selectedImageIndex = 0;
+    }
+
+    notifyListeners();
+  }
+
 
 
 
