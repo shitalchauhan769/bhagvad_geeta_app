@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: NetworkImage(
-                            providerW!.chapterList[index].imageUrl as String),
+                           "${providerW!.chapterList[index].imageUrl}"),
                         fit: BoxFit.fill)),
               );
             },
